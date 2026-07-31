@@ -257,7 +257,7 @@
   .cover{
     width: 100%;
     aspect-ratio: 3/4;
-    max-width: 150px;
+    max-width: 160px;
     margin: 6px auto 0;
     border-radius: 12px;
     overflow:hidden;
@@ -265,19 +265,39 @@
     box-shadow: 0 8px 14px rgba(0,0,0,0.18), inset 0 0 0 1px rgba(0,0,0,0.04);
     transform: translateZ(26px);
     transition: transform 0.35s cubic-bezier(.2,.8,.2,1);
+    position: relative;
   }
   .card:hover .cover{ transform: translateZ(46px); }
-  .cover img{
+
+  /* ---- mini galería deslizable dentro de cada tapa ---- */
+  .slides-track{
+    display:flex;
+    width:100%;
+    height:100%;
+    transition: transform 0.3s ease;
+    touch-action: pan-y; /* deja scrollear la página en vertical; el swipe horizontal lo maneja el JS */
+  }
+  .slide{
+    position:relative;
+    flex:0 0 100%;
+    width:100%;
+    height:100%;
+  }
+  .slide img{
+    position:absolute;
+    inset:0;
     width:100%;
     height:100%;
     object-fit:cover;
     display:block;
   }
-  .cover .placeholder{
+  .slide .placeholder{
+    position:absolute;
+    inset:0;
     width:100%;
     height:100%;
     border: 3px dashed #d3d3ef;
-    display:flex;
+    display:none;
     align-items:center;
     justify-content:center;
     font-size: 0.65rem;
@@ -287,6 +307,50 @@
     padding: 6px;
     line-height:1.3;
     border-radius:12px;
+    background:#f3f1ff;
+  }
+  .gallery-btn{
+    position:absolute;
+    top:50%;
+    transform: translateY(-50%);
+    width:24px; height:24px;
+    border-radius:50%;
+    background: rgba(0,0,0,0.4);
+    color:#fff;
+    border:none;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:15px;
+    line-height:1;
+    cursor:pointer;
+    z-index:3;
+    padding:0;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .gallery-btn.prev{ left:4px; }
+  .gallery-btn.next{ right:4px; }
+  .gallery-btn:active{ background: rgba(0,0,0,0.6); }
+  .gallery-dots{
+    position:absolute;
+    bottom:5px;
+    left:0; right:0;
+    display:flex;
+    justify-content:center;
+    gap:4px;
+    z-index:3;
+  }
+  .gallery-dots .dot{
+    width:5px; height:5px;
+    border-radius:50%;
+    background: rgba(255,255,255,0.65);
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.15);
+    transition: width 0.2s ease, background 0.2s ease;
+  }
+  .gallery-dots .dot.active{
+    background:#fff;
+    width:12px;
+    border-radius:4px;
   }
 
   .card-title{
@@ -397,8 +461,23 @@
       <div class="card" style="--accent:var(--sun)">
         <div class="rings"><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="cover">
-          <img src="tapas/a-colorear.jpg" alt="A colorear" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+          <div class="slides-track">
+            <div class="slide">
+              <img src="tapas/a-colorear.jpg" alt="A colorear" onerror="rvCoverError(this)">
+              <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+            </div>
+            <div class="slide">
+              <img src="tapas/a-colorear-2.jpg" alt="A colorear - foto 2" onerror="rvExtraError(this)">
+            </div>
+            <div class="slide">
+              <img src="tapas/a-colorear-3.jpg" alt="A colorear - foto 3" onerror="rvExtraError(this)">
+            </div>
+          </div>
+          <button type="button" class="gallery-btn prev" aria-label="Foto anterior" onclick="rvGalleryNav(this,-1)">‹</button>
+          <button type="button" class="gallery-btn next" aria-label="Foto siguiente" onclick="rvGalleryNav(this,1)">›</button>
+          <div class="gallery-dots">
+            <span class="dot active"></span><span class="dot"></span><span class="dot"></span>
+          </div>
         </div>
         <h3 class="card-title">A colorear</h3>
         <p class="card-desc">Láminas para pintar y ejercitar la motricidad fina.</p>
@@ -408,8 +487,23 @@
       <div class="card" style="--accent:var(--sun)">
         <div class="rings"><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="cover">
-          <img src="tapas/abecedario.jpg" alt="Abecedario" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+          <div class="slides-track">
+            <div class="slide">
+              <img src="tapas/abecedario.jpg" alt="Abecedario" onerror="rvCoverError(this)">
+              <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+            </div>
+            <div class="slide">
+              <img src="tapas/abecedario-2.jpg" alt="Abecedario - foto 2" onerror="rvExtraError(this)">
+            </div>
+            <div class="slide">
+              <img src="tapas/abecedario-3.jpg" alt="Abecedario - foto 3" onerror="rvExtraError(this)">
+            </div>
+          </div>
+          <button type="button" class="gallery-btn prev" aria-label="Foto anterior" onclick="rvGalleryNav(this,-1)">‹</button>
+          <button type="button" class="gallery-btn next" aria-label="Foto siguiente" onclick="rvGalleryNav(this,1)">›</button>
+          <div class="gallery-dots">
+            <span class="dot active"></span><span class="dot"></span><span class="dot"></span>
+          </div>
         </div>
         <h3 class="card-title">Abecedario</h3>
         <p class="card-desc">Reconocimiento y trazo de todas las letras.</p>
@@ -419,8 +513,23 @@
       <div class="card" style="--accent:var(--sun)">
         <div class="rings"><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="cover">
-          <img src="tapas/numeros-preescolar.jpg" alt="Números" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+          <div class="slides-track">
+            <div class="slide">
+              <img src="tapas/numeros-preescolar.jpg" alt="Números" onerror="rvCoverError(this)">
+              <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+            </div>
+            <div class="slide">
+              <img src="tapas/numeros-preescolar-2.jpg" alt="Números - foto 2" onerror="rvExtraError(this)">
+            </div>
+            <div class="slide">
+              <img src="tapas/numeros-preescolar-3.jpg" alt="Números - foto 3" onerror="rvExtraError(this)">
+            </div>
+          </div>
+          <button type="button" class="gallery-btn prev" aria-label="Foto anterior" onclick="rvGalleryNav(this,-1)">‹</button>
+          <button type="button" class="gallery-btn next" aria-label="Foto siguiente" onclick="rvGalleryNav(this,1)">›</button>
+          <div class="gallery-dots">
+            <span class="dot active"></span><span class="dot"></span><span class="dot"></span>
+          </div>
         </div>
         <h3 class="card-title">Números</h3>
         <p class="card-desc">Conteo y trazo de números para preescolar.</p>
@@ -430,8 +539,23 @@
       <div class="card" style="--accent:var(--sun)">
         <div class="rings"><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="cover">
-          <img src="tapas/trazos-2.jpg" alt="Trazos 2" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+          <div class="slides-track">
+            <div class="slide">
+              <img src="tapas/trazos-2.jpg" alt="Trazos 2" onerror="rvCoverError(this)">
+              <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+            </div>
+            <div class="slide">
+              <img src="tapas/trazos-2-2.jpg" alt="Trazos 2 - foto 2" onerror="rvExtraError(this)">
+            </div>
+            <div class="slide">
+              <img src="tapas/trazos-2-3.jpg" alt="Trazos 2 - foto 3" onerror="rvExtraError(this)">
+            </div>
+          </div>
+          <button type="button" class="gallery-btn prev" aria-label="Foto anterior" onclick="rvGalleryNav(this,-1)">‹</button>
+          <button type="button" class="gallery-btn next" aria-label="Foto siguiente" onclick="rvGalleryNav(this,1)">›</button>
+          <div class="gallery-dots">
+            <span class="dot active"></span><span class="dot"></span><span class="dot"></span>
+          </div>
         </div>
         <h3 class="card-title">Trazos 2</h3>
         <p class="card-desc">Segundo nivel de trazos, líneas y formas.</p>
@@ -441,8 +565,23 @@
       <div class="card" style="--accent:var(--sun)">
         <div class="rings"><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="cover">
-          <img src="tapas/integral-preescolar.jpg" alt="Integral preescolar" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+          <div class="slides-track">
+            <div class="slide">
+              <img src="tapas/integral-preescolar.jpg" alt="Integral preescolar" onerror="rvCoverError(this)">
+              <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+            </div>
+            <div class="slide">
+              <img src="tapas/integral-preescolar-2.jpg" alt="Integral preescolar - foto 2" onerror="rvExtraError(this)">
+            </div>
+            <div class="slide">
+              <img src="tapas/integral-preescolar-3.jpg" alt="Integral preescolar - foto 3" onerror="rvExtraError(this)">
+            </div>
+          </div>
+          <button type="button" class="gallery-btn prev" aria-label="Foto anterior" onclick="rvGalleryNav(this,-1)">‹</button>
+          <button type="button" class="gallery-btn next" aria-label="Foto siguiente" onclick="rvGalleryNav(this,1)">›</button>
+          <div class="gallery-dots">
+            <span class="dot active"></span><span class="dot"></span><span class="dot"></span>
+          </div>
         </div>
         <h3 class="card-title">geometria</h3>
         <p class="card-desc">Formas,figuras y primera nocion de geometria </p>
@@ -452,8 +591,23 @@
       <div class="card" style="--accent:var(--sun)">
         <div class="rings"><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="cover">
-          <img src="tapas/mis-trazos.jpg" alt="Trazos 1" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+          <div class="slides-track">
+            <div class="slide">
+              <img src="tapas/mis-trazos.jpg" alt="Trazos 1" onerror="rvCoverError(this)">
+              <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+            </div>
+            <div class="slide">
+              <img src="tapas/mis-trazos-2.jpg" alt="Trazos 1 - foto 2" onerror="rvExtraError(this)">
+            </div>
+            <div class="slide">
+              <img src="tapas/mis-trazos-3.jpg" alt="Trazos 1 - foto 3" onerror="rvExtraError(this)">
+            </div>
+          </div>
+          <button type="button" class="gallery-btn prev" aria-label="Foto anterior" onclick="rvGalleryNav(this,-1)">‹</button>
+          <button type="button" class="gallery-btn next" aria-label="Foto siguiente" onclick="rvGalleryNav(this,1)">›</button>
+          <div class="gallery-dots">
+            <span class="dot active"></span><span class="dot"></span><span class="dot"></span>
+          </div>
         </div>
         <h3 class="card-title">Trazos 1</h3>
         <p class="card-desc">Práctica de grafomotricidad con divertidos recorridos y formas.</p>
@@ -470,8 +624,23 @@
       <div class="card" style="--accent:var(--pink)">
         <div class="rings"><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="cover">
-          <img src="tapas/aprendemos-cursiva.jpg" alt="Aprendemos cursiva" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+          <div class="slides-track">
+            <div class="slide">
+              <img src="tapas/aprendemos-cursiva.jpg" alt="Aprendemos cursiva" onerror="rvCoverError(this)">
+              <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+            </div>
+            <div class="slide">
+              <img src="tapas/aprendemos-cursiva-2.jpg" alt="Aprendemos cursiva - foto 2" onerror="rvExtraError(this)">
+            </div>
+            <div class="slide">
+              <img src="tapas/aprendemos-cursiva-3.jpg" alt="Aprendemos cursiva - foto 3" onerror="rvExtraError(this)">
+            </div>
+          </div>
+          <button type="button" class="gallery-btn prev" aria-label="Foto anterior" onclick="rvGalleryNav(this,-1)">‹</button>
+          <button type="button" class="gallery-btn next" aria-label="Foto siguiente" onclick="rvGalleryNav(this,1)">›</button>
+          <div class="gallery-dots">
+            <span class="dot active"></span><span class="dot"></span><span class="dot"></span>
+          </div>
         </div>
         <h3 class="card-title">Aprendemos cursiva</h3>
         <p class="card-desc">Práctica paso a paso para aprender a escribir en letra cursiva.</p>
@@ -481,8 +650,23 @@
       <div class="card" style="--accent:var(--pink)">
         <div class="rings"><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="cover">
-          <img src="tapas/lectura-matematica-1ro.jpg" alt="Practicamos lectura y matemática" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+          <div class="slides-track">
+            <div class="slide">
+              <img src="tapas/lectura-matematica-1ro.jpg" alt="Practicamos lectura y matemática" onerror="rvCoverError(this)">
+              <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+            </div>
+            <div class="slide">
+              <img src="tapas/lectura-matematica-1ro-2.jpg" alt="Practicamos lectura y matemática - foto 2" onerror="rvExtraError(this)">
+            </div>
+            <div class="slide">
+              <img src="tapas/lectura-matematica-1ro-3.jpg" alt="Practicamos lectura y matemática - foto 3" onerror="rvExtraError(this)">
+            </div>
+          </div>
+          <button type="button" class="gallery-btn prev" aria-label="Foto anterior" onclick="rvGalleryNav(this,-1)">‹</button>
+          <button type="button" class="gallery-btn next" aria-label="Foto siguiente" onclick="rvGalleryNav(this,1)">›</button>
+          <div class="gallery-dots">
+            <span class="dot active"></span><span class="dot"></span><span class="dot"></span>
+          </div>
         </div>
         <h3 class="card-title">Practicamos lectura y matemática</h3>
         <p class="card-desc">Ejercicios combinados para reforzar ambas áreas.</p>
@@ -492,8 +676,23 @@
       <div class="card" style="--accent:var(--pink)">
         <div class="rings"><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="cover">
-          <img src="tapas/escritura-1ro.jpg" alt="Practicamos escritura" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+          <div class="slides-track">
+            <div class="slide">
+              <img src="tapas/escritura-1ro.jpg" alt="Practicamos escritura" onerror="rvCoverError(this)">
+              <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+            </div>
+            <div class="slide">
+              <img src="tapas/escritura-1ro-2.jpg" alt="Practicamos escritura - foto 2" onerror="rvExtraError(this)">
+            </div>
+            <div class="slide">
+              <img src="tapas/escritura-1ro-3.jpg" alt="Practicamos escritura - foto 3" onerror="rvExtraError(this)">
+            </div>
+          </div>
+          <button type="button" class="gallery-btn prev" aria-label="Foto anterior" onclick="rvGalleryNav(this,-1)">‹</button>
+          <button type="button" class="gallery-btn next" aria-label="Foto siguiente" onclick="rvGalleryNav(this,1)">›</button>
+          <div class="gallery-dots">
+            <span class="dot active"></span><span class="dot"></span><span class="dot"></span>
+          </div>
         </div>
         <h3 class="card-title">Practicamos escritura</h3>
         <p class="card-desc">Caligrafía y práctica de escritura guiada.</p>
@@ -510,8 +709,23 @@
       <div class="card" style="--accent:var(--sea)">
         <div class="rings"><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="cover">
-          <img src="tapas/lengua-2do.jpg" alt="Lengua" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+          <div class="slides-track">
+            <div class="slide">
+              <img src="tapas/lengua-2do.jpg" alt="Lengua" onerror="rvCoverError(this)">
+              <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+            </div>
+            <div class="slide">
+              <img src="tapas/lengua-2do-2.jpg" alt="Lengua - foto 2" onerror="rvExtraError(this)">
+            </div>
+            <div class="slide">
+              <img src="tapas/lengua-2do-3.jpg" alt="Lengua - foto 3" onerror="rvExtraError(this)">
+            </div>
+          </div>
+          <button type="button" class="gallery-btn prev" aria-label="Foto anterior" onclick="rvGalleryNav(this,-1)">‹</button>
+          <button type="button" class="gallery-btn next" aria-label="Foto siguiente" onclick="rvGalleryNav(this,1)">›</button>
+          <div class="gallery-dots">
+            <span class="dot active"></span><span class="dot"></span><span class="dot"></span>
+          </div>
         </div>
         <h3 class="card-title">Lengua</h3>
         <p class="card-desc">Comprensión de textos y gramática básica.</p>
@@ -521,8 +735,23 @@
       <div class="card" style="--accent:var(--sea)">
         <div class="rings"><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="cover">
-          <img src="tapas/matematica-2do.jpg" alt="Matemática" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+          <div class="slides-track">
+            <div class="slide">
+              <img src="tapas/matematica-2do.jpg" alt="Matemática" onerror="rvCoverError(this)">
+              <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+            </div>
+            <div class="slide">
+              <img src="tapas/matematica-2do-2.jpg" alt="Matemática - foto 2" onerror="rvExtraError(this)">
+            </div>
+            <div class="slide">
+              <img src="tapas/matematica-2do-3.jpg" alt="Matemática - foto 3" onerror="rvExtraError(this)">
+            </div>
+          </div>
+          <button type="button" class="gallery-btn prev" aria-label="Foto anterior" onclick="rvGalleryNav(this,-1)">‹</button>
+          <button type="button" class="gallery-btn next" aria-label="Foto siguiente" onclick="rvGalleryNav(this,1)">›</button>
+          <div class="gallery-dots">
+            <span class="dot active"></span><span class="dot"></span><span class="dot"></span>
+          </div>
         </div>
         <h3 class="card-title">Matemática</h3>
         <p class="card-desc">Operaciones y problemas para segundo grado.</p>
@@ -532,8 +761,23 @@
       <div class="card" style="--accent:var(--sea)">
         <div class="rings"><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="cover">
-          <img src="tapas/ingles-2do.jpg" alt="Inglés" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+          <div class="slides-track">
+            <div class="slide">
+              <img src="tapas/ingles-2do.jpg" alt="Inglés" onerror="rvCoverError(this)">
+              <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+            </div>
+            <div class="slide">
+              <img src="tapas/ingles-2do-2.jpg" alt="Inglés - foto 2" onerror="rvExtraError(this)">
+            </div>
+            <div class="slide">
+              <img src="tapas/ingles-2do-3.jpg" alt="Inglés - foto 3" onerror="rvExtraError(this)">
+            </div>
+          </div>
+          <button type="button" class="gallery-btn prev" aria-label="Foto anterior" onclick="rvGalleryNav(this,-1)">‹</button>
+          <button type="button" class="gallery-btn next" aria-label="Foto siguiente" onclick="rvGalleryNav(this,1)">›</button>
+          <div class="gallery-dots">
+            <span class="dot active"></span><span class="dot"></span><span class="dot"></span>
+          </div>
         </div>
         <h3 class="card-title">Inglés</h3>
         <p class="card-desc">Vocabulario y ejercicios básicos de inglés.</p>
@@ -543,8 +787,23 @@
       <div class="card" style="--accent:var(--sea)">
         <div class="rings"><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="cover">
-          <img src="tapas/lengua-2do-2da-edicion.jpg" alt="Lengua (2da edición)" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+          <div class="slides-track">
+            <div class="slide">
+              <img src="tapas/lengua-2do-2da-edicion.jpg" alt="Lengua (2da edición)" onerror="rvCoverError(this)">
+              <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+            </div>
+            <div class="slide">
+              <img src="tapas/lengua-2do-2da-edicion-2.jpg" alt="Lengua (2da edición) - foto 2" onerror="rvExtraError(this)">
+            </div>
+            <div class="slide">
+              <img src="tapas/lengua-2do-2da-edicion-3.jpg" alt="Lengua (2da edición) - foto 3" onerror="rvExtraError(this)">
+            </div>
+          </div>
+          <button type="button" class="gallery-btn prev" aria-label="Foto anterior" onclick="rvGalleryNav(this,-1)">‹</button>
+          <button type="button" class="gallery-btn next" aria-label="Foto siguiente" onclick="rvGalleryNav(this,1)">›</button>
+          <div class="gallery-dots">
+            <span class="dot active"></span><span class="dot"></span><span class="dot"></span>
+          </div>
         </div>
         <h3 class="card-title">Lengua (2da edición)</h3>
         <p class="card-desc">Versión revisada y ampliada del cuadernillo de lengua.</p>
@@ -561,8 +820,23 @@
       <div class="card" style="--accent:var(--grass)">
         <div class="rings"><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="cover">
-          <img src="tapas/lengua-3ro.jpg" alt="Lengua" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+          <div class="slides-track">
+            <div class="slide">
+              <img src="tapas/lengua-3ro.jpg" alt="Lengua" onerror="rvCoverError(this)">
+              <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+            </div>
+            <div class="slide">
+              <img src="tapas/lengua-3ro-2.jpg" alt="Lengua - foto 2" onerror="rvExtraError(this)">
+            </div>
+            <div class="slide">
+              <img src="tapas/lengua-3ro-3.jpg" alt="Lengua - foto 3" onerror="rvExtraError(this)">
+            </div>
+          </div>
+          <button type="button" class="gallery-btn prev" aria-label="Foto anterior" onclick="rvGalleryNav(this,-1)">‹</button>
+          <button type="button" class="gallery-btn next" aria-label="Foto siguiente" onclick="rvGalleryNav(this,1)">›</button>
+          <div class="gallery-dots">
+            <span class="dot active"></span><span class="dot"></span><span class="dot"></span>
+          </div>
         </div>
         <h3 class="card-title">Lengua</h3>
         <p class="card-desc">Gramática y comprensión lectora nivel 3.</p>
@@ -572,8 +846,23 @@
       <div class="card" style="--accent:var(--grass)">
         <div class="rings"><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="cover">
-          <img src="tapas/matematica-3ro.jpg" alt="Matemática" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+          <div class="slides-track">
+            <div class="slide">
+              <img src="tapas/matematica-3ro.jpg" alt="Matemática" onerror="rvCoverError(this)">
+              <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+            </div>
+            <div class="slide">
+              <img src="tapas/matematica-3ro-2.jpg" alt="Matemática - foto 2" onerror="rvExtraError(this)">
+            </div>
+            <div class="slide">
+              <img src="tapas/matematica-3ro-3.jpg" alt="Matemática - foto 3" onerror="rvExtraError(this)">
+            </div>
+          </div>
+          <button type="button" class="gallery-btn prev" aria-label="Foto anterior" onclick="rvGalleryNav(this,-1)">‹</button>
+          <button type="button" class="gallery-btn next" aria-label="Foto siguiente" onclick="rvGalleryNav(this,1)">›</button>
+          <div class="gallery-dots">
+            <span class="dot active"></span><span class="dot"></span><span class="dot"></span>
+          </div>
         </div>
         <h3 class="card-title">Matemática</h3>
         <p class="card-desc">Operaciones y problemas de razonamiento.</p>
@@ -590,8 +879,23 @@
       <div class="card" style="--accent:var(--grape)">
         <div class="rings"><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="cover">
-          <img src="tapas/fracciones-4to.jpg" alt="Fracciones" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+          <div class="slides-track">
+            <div class="slide">
+              <img src="tapas/fracciones-4to.jpg" alt="Fracciones" onerror="rvCoverError(this)">
+              <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+            </div>
+            <div class="slide">
+              <img src="tapas/fracciones-4to-2.jpg" alt="Fracciones - foto 2" onerror="rvExtraError(this)">
+            </div>
+            <div class="slide">
+              <img src="tapas/fracciones-4to-3.jpg" alt="Fracciones - foto 3" onerror="rvExtraError(this)">
+            </div>
+          </div>
+          <button type="button" class="gallery-btn prev" aria-label="Foto anterior" onclick="rvGalleryNav(this,-1)">‹</button>
+          <button type="button" class="gallery-btn next" aria-label="Foto siguiente" onclick="rvGalleryNav(this,1)">›</button>
+          <div class="gallery-dots">
+            <span class="dot active"></span><span class="dot"></span><span class="dot"></span>
+          </div>
         </div>
         <h3 class="card-title">Fracciones</h3>
         <p class="card-desc">Enfocado en el trabajo con fracciones paso a paso.</p>
@@ -608,8 +912,23 @@
       <div class="card" style="--accent:var(--ink)">
         <div class="rings"><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="cover">
-          <img src="tapas/general-5to.jpg" alt="Cuadernillo general" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+          <div class="slides-track">
+            <div class="slide">
+              <img src="tapas/general-5to.jpg" alt="Cuadernillo general" onerror="rvCoverError(this)">
+              <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+            </div>
+            <div class="slide">
+              <img src="tapas/general-5to-2.jpg" alt="Cuadernillo general - foto 2" onerror="rvExtraError(this)">
+            </div>
+            <div class="slide">
+              <img src="tapas/general-5to-3.jpg" alt="Cuadernillo general - foto 3" onerror="rvExtraError(this)">
+            </div>
+          </div>
+          <button type="button" class="gallery-btn prev" aria-label="Foto anterior" onclick="rvGalleryNav(this,-1)">‹</button>
+          <button type="button" class="gallery-btn next" aria-label="Foto siguiente" onclick="rvGalleryNav(this,1)">›</button>
+          <div class="gallery-dots">
+            <span class="dot active"></span><span class="dot"></span><span class="dot"></span>
+          </div>
         </div>
         <h3 class="card-title">Cuadernillo general</h3>
         <p class="card-desc">Repaso integral de contenidos de quinto grado.</p>
@@ -619,8 +938,23 @@
       <div class="card" style="--accent:var(--ink)">
         <div class="rings"><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="cover">
-          <img src="tapas/matematica-5to.jpg" alt="Matemáticas 5to grado" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+          <div class="slides-track">
+            <div class="slide">
+              <img src="tapas/matematica-5to.jpg" alt="Matemáticas 5to grado" onerror="rvCoverError(this)">
+              <div class="placeholder" style="display:none;">FOTO<br>TAPA</div>
+            </div>
+            <div class="slide">
+              <img src="tapas/matematica-5to-2.jpg" alt="Matemáticas 5to grado - foto 2" onerror="rvExtraError(this)">
+            </div>
+            <div class="slide">
+              <img src="tapas/matematica-5to-3.jpg" alt="Matemáticas 5to grado - foto 3" onerror="rvExtraError(this)">
+            </div>
+          </div>
+          <button type="button" class="gallery-btn prev" aria-label="Foto anterior" onclick="rvGalleryNav(this,-1)">‹</button>
+          <button type="button" class="gallery-btn next" aria-label="Foto siguiente" onclick="rvGalleryNav(this,1)">›</button>
+          <div class="gallery-dots">
+            <span class="dot active"></span><span class="dot"></span><span class="dot"></span>
+          </div>
         </div>
         <h3 class="card-title">Matemáticas</h3>
         <p class="card-desc">Ejercicios y problemas de matemáticas para quinto grado.</p>
@@ -670,6 +1004,133 @@
       });
     });
   })();
+
+  /* ==========================================================
+     MINI GALERÍA POR CUADERNILLO
+     Cada tapa (.cover) puede mostrar hasta 3 fotos: la tapa
+     (imagen original) + 2 fotos extra opcionales.
+     Para activar la 2da y 3ra foto de un cuadernillo, subí a la
+     carpeta /tapas/ una imagen con el MISMO nombre + "-2" y "-3".
+     Ejemplo: si la tapa es tapas/a-colorear.jpg, las fotos extra
+     serían tapas/a-colorear-2.jpg y tapas/a-colorear-3.jpg.
+     Si esas fotos todavía no existen, esa mini-galería se achica
+     sola a 1 sola imagen (sin flechas ni puntitos) — no rompe nada.
+     ========================================================== */
+
+  // La foto principal (tapa) falló: mostramos el cartel "FOTO TAPA"
+  function rvCoverError(img){
+    img.style.display = 'none';
+    var slide = img.closest('.slide');
+    var ph = slide.querySelector('.placeholder');
+    if (ph) ph.style.display = 'flex';
+    rvGalleryRefresh(img.closest('.cover'));
+  }
+
+  // Una foto extra (2 o 3) falló: esa foto directamente no existe todavía,
+  // así que la sacamos de la galería sin dejar espacios vacíos.
+  function rvExtraError(img){
+    var slide = img.closest('.slide');
+    var cover = img.closest('.cover');
+    slide.remove();
+    rvGalleryRefresh(cover);
+  }
+
+  // Recalcula cuántas fotos quedaron válidas y arma los puntitos/flechas.
+  function rvGalleryRefresh(cover){
+    var track = cover.querySelector('.slides-track');
+    var slides = track.children;
+    var n = slides.length;
+    var dotsWrap = cover.querySelector('.gallery-dots');
+    var prevBtn = cover.querySelector('.gallery-btn.prev');
+    var nextBtn = cover.querySelector('.gallery-btn.next');
+
+    dotsWrap.innerHTML = '';
+    for (var i = 0; i < n; i++){
+      var d = document.createElement('span');
+      d.className = 'dot' + (i === 0 ? ' active' : '');
+      dotsWrap.appendChild(d);
+    }
+
+    var showControls = n > 1;
+    prevBtn.style.display = showControls ? 'flex' : 'none';
+    nextBtn.style.display = showControls ? 'flex' : 'none';
+    dotsWrap.style.display = showControls ? 'flex' : 'none';
+
+    cover.dataset.index = '0';
+    track.style.transition = 'none';
+    track.style.transform = 'translateX(0%)';
+    // reactivamos la transición suave después de este reset instantáneo
+    requestAnimationFrame(function(){ track.style.transition = ''; });
+  }
+
+  // Mueve la galería a un índice puntual (con wrap-around) y sincroniza los dots.
+  function rvGallerySetIndex(cover, idx){
+    var track = cover.querySelector('.slides-track');
+    var n = track.children.length;
+    if (n === 0) return;
+    idx = ((idx % n) + n) % n;
+    track.style.transform = 'translateX(' + (-idx * 100) + '%)';
+    cover.dataset.index = String(idx);
+    var dots = cover.querySelectorAll('.gallery-dots .dot');
+    dots.forEach(function(d, i){ d.classList.toggle('active', i === idx); });
+  }
+
+  // Click en flecha ‹ ›
+  function rvGalleryNav(btn, dir){
+    var cover = btn.closest('.cover');
+    var idx = parseInt(cover.dataset.index || '0', 10);
+    rvGallerySetIndex(cover, idx + dir);
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    var covers = document.querySelectorAll('.cover');
+
+    covers.forEach(function(cover){
+      cover.dataset.index = '0';
+      var track = cover.querySelector('.slides-track');
+      var startX = 0, startY = 0, dragging = false, moved = 0, width = 0, horizontal = null;
+
+      // Swipe táctil — pensado para celular, que es donde más se va a usar esto.
+      cover.addEventListener('touchstart', function(e){
+        if (e.touches.length !== 1) return;
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        width = cover.clientWidth;
+        dragging = true;
+        horizontal = null;
+        track.style.transition = 'none';
+      }, { passive: true });
+
+      cover.addEventListener('touchmove', function(e){
+        if (!dragging) return;
+        var dx = e.touches[0].clientX - startX;
+        var dy = e.touches[0].clientY - startY;
+        if (horizontal === null) horizontal = Math.abs(dx) > Math.abs(dy);
+        if (!horizontal) return; // el gesto es más vertical: dejamos que la página scrollee normal
+        e.preventDefault();
+        moved = dx;
+        var idx = parseInt(cover.dataset.index || '0', 10);
+        var basePx = -idx * width;
+        track.style.transform = 'translateX(' + (basePx + dx) + 'px)';
+      }, { passive: false });
+
+      cover.addEventListener('touchend', function(){
+        if (!dragging) return;
+        dragging = false;
+        track.style.transition = '';
+        var idx = parseInt(cover.dataset.index || '0', 10);
+        if (horizontal && Math.abs(moved) > 40){
+          idx += moved < 0 ? 1 : -1;
+        }
+        moved = 0;
+        rvGallerySetIndex(cover, idx);
+      });
+    });
+
+    // Primer barrido: si alguna foto ya falló (404 cacheado) antes de este punto,
+    // dejamos todo prolijo desde el arranque.
+    covers.forEach(rvGalleryRefresh);
+  });
 </script>
 
 </body>
