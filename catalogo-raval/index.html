@@ -146,10 +146,11 @@
   main{
     max-width: 1000px;
     margin: 0 auto;
-    padding: 20px 20px 100px;
+    padding: 20px 20px 30px;
   }
 
   .nivel-block{ margin-bottom: 56px; }
+  .nivel-block:last-of-type{ margin-bottom: 6px; }
   .nivel-title{
     font-family:'Baloo 2', cursive;
     font-weight:800;
@@ -394,42 +395,79 @@
 
   footer{
     text-align:center;
-    padding: 20px 20px 50px;
+    padding: 0 20px 50px;
     font-family:'Baloo 2', cursive;
     font-weight:600;
     font-size: 0.85rem;
     color: var(--grape);
   }
+
+  @keyframes starPulse{
+    0%,100%{ transform: scale(1) rotate(0deg); }
+    50%{ transform: scale(1.18) rotate(8deg); }
+  }
+  @keyframes shimmer{
+    0%,100%{ background-position: 0% 50%; }
+    50%{ background-position: 100% 50%; }
+  }
+
   .closing-message {
-    background: #ffffff;
-    border-radius: 24px;
-    padding: 32px 24px;
-    margin: 40px 20px;
+    background: linear-gradient(120deg, #fff2f8, #f3f0ff, #eaf9ff, #fff2f8);
+    background-size: 300% 300%;
+    animation: shimmer 8s ease infinite, popIn 0.5s ease backwards;
+    border-radius: 28px;
+    padding: 34px 24px;
+    margin: 0 20px 40px;
     text-align: center;
-    box-shadow: 0 18px 34px -10px rgba(47,47,74,0.22), 0 4px 0 rgba(0,0,0,0.05);
-    border: 2px solid #eef0ff;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+      0 22px 40px -12px rgba(177,140,255,0.4),
+      0 7px 0 var(--pink),
+      0 0 0 3px rgba(255,255,255,0.9),
+      0 0 0 6px var(--grape);
     transform-style: preserve-3d;
   }
+  .closing-message::before,
+  .closing-message::after {
+    content: "✨";
+    position: absolute;
+    font-size: 1.4rem;
+    opacity: 0.85;
+    animation: floaty3d 5s ease-in-out infinite;
+  }
+  .closing-message::before { top: 12px; left: 16px; }
+  .closing-message::after { bottom: 12px; right: 16px; animation-delay: 1.5s; }
   .closing-icon {
-    font-size: 40px;
+    font-size: 52px;
     margin-bottom: 12px;
     display:inline-block;
-    animation: floaty3d 4s ease-in-out infinite;
+    filter: drop-shadow(0 6px 10px rgba(255,206,84,0.5));
+    animation: starPulse 2.2s ease-in-out infinite;
   }
   .closing-text {
-    font-size: 18px;
+    font-size: 19px;
     line-height: 1.6;
     color: #4b3f8f;
-    font-weight: 600;
+    font-weight: 700;
     margin: 0 0 16px 0;
   }
   .closing-text strong {
-    color: #1e1b3a;
+    color: var(--pink);
+    -webkit-text-decoration: underline wavy var(--sun);
+    text-decoration: underline wavy var(--sun);
+    text-underline-offset: 3px;
   }
   .closing-brand {
-    font-size: 14px;
-    color: #8b7fc7;
-    font-weight: 500;
+    display: inline-block;
+    font-size: 13px;
+    color: var(--white);
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    background: linear-gradient(120deg, var(--sea), var(--grape));
+    padding: 7px 18px;
+    border-radius: 999px;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.1), 0 6px 10px rgba(47,47,74,0.2);
   }
 </style>
 </head>
